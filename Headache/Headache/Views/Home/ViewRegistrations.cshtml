@@ -40,6 +40,7 @@
             <th>Date of Birth</th>
             <th>Gender</th>
             <th>Nationality</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -51,9 +52,38 @@
                 <td>@(registration.DateOfBirth.ToShortDateString())</td>
                 <td>@(Headache.Models.Constants.GetGender(registration.Gender))</td>
                 <td>@registration.Nationality -- @(Headache.Models.Constants.GetNationality(registration.Nationality))</td>
+                <td>@Html.ActionLink("Edit", "EditRegistration", new { id = @registration.Id }, new { id = "test_id", @class = "btn btn-default" }) <button class="btn btn-default" id=@($"btn-delete-{registration.Id}") data-item-id="@registration.Id" onclick="handleDelete.apply($(this))">Delete</button> </td>
             </tr>
+
+            
         }
     </tbody>
 </table>
 
 <button type="button" class="btn btn-default" onclick="window.history.back()">Back</button>
+
+<script>
+    function handleDelete(btn) {
+        var id = this.attr('data-item-id');
+        var sure = confirm('This will delete the selected record from the system. Continue?');
+        if (sure) {
+            $.ajax({
+                url: '@Url.Action("DeleteRegistration")',
+                type: 'POST',
+                data: {
+                    'id': id
+                },
+                success: function (response) {
+                    if (response) {
+                        window.location.reload();
+                    } else {
+                        alert('Could delete the record due to some error');
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            })
+        }
+    }
+</script>

@@ -41,6 +41,8 @@ namespace Headache.Models
                     return "ATICANI";
                 case 203:
                     return "PAKISTANIAN";
+                case 114:
+                    return "NIGERIA";
                 default:
                     return "N/A";
             }

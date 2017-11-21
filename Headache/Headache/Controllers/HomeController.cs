@@ -215,13 +215,121 @@ namespace Headache.Controllers
             };
             db.registrations.Add(registration);
             db.SaveChanges();
-            return RedirectToAction("ShowRegisterData");
+            return RedirectToAction("ViewRegistrations");
 
         }
 
         public ActionResult ViewRegistrations()
         {
             return View(db.registrations.ToList());
+        }
+
+        public ActionResult EditRegistration(int id)
+        {
+            var reg = db.registrations.Find(id);
+            if(reg == null)
+            {
+                return HttpNotFound();
+            }
+            return View(reg);
+        }
+
+        [HttpPost]
+        public ActionResult EditRegistration()
+        {
+            var regNo = Convert.ToInt32(Request.Form["reg_id"]);
+            var visa1 = Request.Form["input_visa_1"];
+            var visa2 = Request.Form["input_visa_2"];
+            var visa3 = Request.Form["input_visa_3"];
+            var visa4 = Request.Form["input_visa_4"];
+            var name = (Request.Form["fullname"]).Trim();
+            int gender, dob_dd, dob_mmm, dob_yyyy, nationality;
+            try
+            {
+                gender = Convert.ToInt32(Request.Form["input_gender"]);
+                dob_dd = Convert.ToInt32(Request.Form["select_dd"]);
+                dob_mmm = Convert.ToInt32(Request.Form["select_mmm"]);
+                dob_yyyy = Convert.ToInt32(Request.Form["select_yyyy"]);
+                nationality = Convert.ToInt32(Request.Form["select_nationality"]);
+            }
+            catch
+            {
+                return Content("Gender, date of birth and/or nationality was not specified.");
+            }
+
+            if (string.IsNullOrEmpty(visa1))
+            {
+                return Content("Visa number entered is invalid.");
+            }
+
+            if (string.IsNullOrEmpty(visa2))
+            {
+                return Content("Visa number entered is invalid.");
+            }
+
+            if (string.IsNullOrEmpty(visa3))
+            {
+                return Content("Visa number entered is invalid.");
+            }
+
+            if (string.IsNullOrEmpty(visa4))
+            {
+                return Content("Visa number entered is invalid.");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return Content("Name was not entered");
+            }
+
+            DateTime dateOfBirth;
+            try
+            {
+                dateOfBirth = new DateTime(dob_yyyy, dob_mmm, dob_dd);
+            }
+            catch
+            {
+                return Content("Date of birth was not entered correctly");
+            }
+
+            var registration = new registration
+            {
+                DateOfBirth = dateOfBirth,
+                Gender = gender,
+                Name = name,
+                Nationality = nationality,
+                VisaNum1 = visa1,
+                VisaNum2 = visa2,
+                VisaNum3 = visa3,
+                VisaNum4 = visa4
+            };
+            var registrationToEdit = db.registrations.Find(regNo);
+            registrationToEdit.DateOfBirth = registration.DateOfBirth;
+            registrationToEdit.Gender = registration.Gender;
+            registrationToEdit.Name = registration.Name;
+            registrationToEdit.Nationality = registration.Nationality;
+            registrationToEdit.VisaNum1 = registration.VisaNum1;
+            registrationToEdit.VisaNum2 = registration.VisaNum2;
+            registrationToEdit.VisaNum3 = registration.VisaNum3;
+            registrationToEdit.VisaNum4 = registration.VisaNum4;
+
+            db.Entry(registrationToEdit).State = System.Data.EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("ViewRegistrations");
+        }
+
+        [HttpPost]
+        public JsonResult DeleteRegistration(int id)
+        {
+            var registration = db.registrations.Find(id);
+            if(registration == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            db.Entry(registration).State = System.Data.EntityState.Deleted;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

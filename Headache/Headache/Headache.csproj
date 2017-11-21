@@ -267,6 +267,7 @@
     <Content Include="Views\Home\SearchData.cshtml" />
     <Content Include="Views\Home\ShowRegisterData.cshtml" />
     <Content Include="Views\Home\ViewRegistrations.cshtml" />
+    <Content Include="Views\Home\EditRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

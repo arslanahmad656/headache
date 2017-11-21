@@ -1,19 +1,7 @@
-﻿@{
-    ViewBag.Title = "Visa Inquiry";
-}
+﻿@model Headache.Models.registration
 
-@{ 
-    var registration = (Headache.Models.registration)ViewBag.Registration;
-    var valid = (bool)ViewBag.Valid;
-    var exception = (bool)ViewBag.Exception;
-    var exceptionMessage = (string)ViewBag.ExceptionMessage;
-}
-
-@if (exception)
-{
-    <script>
-        alert("@exceptionMessage");
-    </script>
+@{
+    ViewBag.Title = "Register Customer";
 }
 
 <div id="ctl00_divTopMenu" class="tnav topNav forceDisplay">
@@ -42,7 +30,7 @@
     </ul>
 </div>
 
-<div id="ctl00_headerDiv" class="banner" style="background-image:url('~/Content/img/header_bg.jpg');background-repeat:no-repeat;">
+<div id="ctl00_headerDiv" class="banner">
     <div class="uaeLogo pull-left">
         <h2 class="pull-left">
             <a href="https://www.moi.gov.ae/" target="_blank">
@@ -60,10 +48,10 @@
     </div>
     @*<div class="appLogo pull-left">
 
-        <h1>
-            <img id="ctl00_Image2" class="img-responsive" style="border-width:0px;" src="~/Content/img/fawri.png" />
-        </h1>
-    </div>*@
+            <h1>
+                <img id="ctl00_Image2" class="img-responsive" alt="Fawri Logo" style="border-width:0px;" src="~/Content/img/fawri.png" />
+            </h1>
+        </div>*@
 </div>
 
 <div class="clearfix" style="background-image: url(../../Content/img/header_bg.jpg); background-repeat:no-repeat;"></div>
@@ -73,12 +61,13 @@
     <div id="ctl00_div1" class="row ttsdesc">
         <div class="col-xs-9" style="font-size: 18px;">
             <strong>
-                Login
+                Edit Visa Entry
             </strong>
         </div>
     </div>
 
-    <form action="@Url.Action("ProcessSearchData")" method="post">
+    <form action="@Url.Action("EditRegistration")" method="post">
+        <input type="hidden" name="reg_id" value="@Model.Id" />
 
         <table style="width: 100%;">
             <tr>
@@ -89,13 +78,13 @@
                         <div class="col-sm-9">
                             <div class="row">
                                 <div class="col-xs-2 initial-input">
-                                    <input class="form-control" id="input-service" />
+                                    <input class="form-control" id="input-service" value="1" />
                                 </div>
 
                                 <div class="col-xs-8">
                                     <select class="form-control" id="select-service">
-                                        <option value="" ID="" selected>---- Select Service ----</option>
-                                        <option value="1" ID="">Entry Permit Validity</option>
+                                        <option value="" ID="">---- Select Service ----</option>
+                                        <option value="1" ID="" selected>Entry Permit Validity</option>
                                     </select>
                                 </div>
                             </div>
@@ -109,19 +98,19 @@
                                 <div class="col-sm-7">
                                     <div class="row">
                                         <div class="col-xs-2 initial-input">
-                                            <input type="text" class="form-control NoPadding" placeholder="XXX" id="input-visa-1" name="input_visa_1" />
+                                            <input type="text" class="form-control NoPadding" placeholder="XXX" id="input-visa-1" name="input_visa_1" value="@Model.VisaNum1" />
                                         </div>
 
                                         <div class="col-xs-3 initial-input">
-                                            <input type="text" class="form-control NoPadding" placeholder="XXXX" id="input-visa-2" name="input_visa_2" />
+                                            <input type="text" class="form-control NoPadding" placeholder="XXXX" id="input-visa-2" name="input_visa_2" value="@Model.VisaNum2" />
                                         </div>
 
                                         <div class="col-xs-2 initial-input">
-                                            <input type="text" class="form-control NoPadding" placeholder="XX" id="input-visa-3" name="input_visa_3" />
+                                            <input type="text" class="form-control NoPadding" placeholder="XX" id="input-visa-3" name="input_visa_3" value="@Model.VisaNum3" />
                                         </div>
 
                                         <div class="col-xs-5 initial-input">
-                                            <input type="text" class="form-control NoPadding" placeholder="XXXXXXX" id="input-visa-4" name="input_visa_4" />
+                                            <input type="text" class="form-control NoPadding" placeholder="XXXXXXX" id="input-visa-4" name="input_visa_4" value="@Model.VisaNum4" />
                                         </div>
 
                                     </div>
@@ -135,7 +124,7 @@
                         <div class="col-sm-9">
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <input class="form-control NoPadding" type="text" id="input-name" name="fullname"/>
+                                    <input class="form-control NoPadding" type="text" id="input-name" name="fullname" value="@Model.Name.Trim()" />
                                 </div>
                             </div>
                         </div>
@@ -147,12 +136,12 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div class="col-xs-2">
-                                        <input class="form-control" id="input-gender" />
+                                        <input class="form-control" id="input-gender" name="input_gender" value="@Model.Gender" />
                                     </div>
 
                                     <div class="col-xs-10">
-                                        <select class="form-control" id="select-gender" name="input_gender">
-                                            <option value="" ID="" selected>---- Select Gender ----</option>
+                                        <select class="form-control" id="select-gender">
+                                            <option value="" ID="">---- Select Gender ----</option>
                                             <option value="1">Male</option>
                                             <option value="2">Female</option>
                                         </select>
@@ -202,7 +191,7 @@
                         <div class="col-sm-9">
                             <div class="row">
                                 <div class="col-xs-2 initial-input">
-                                    <input type="text" class="form-control NoPadding" id="input-nationality" />
+                                    <input type="text" class="form-control NoPadding" id="input-nationality" value="@Model.Nationality" />
                                 </div>
                                 <div class="col-xs-7 initial-input">
                                     <select class="form-control NoPadding" id="select-nationality" name="select_nationality">
@@ -264,8 +253,6 @@
                                 @*<input type="submit" class="btn btnBlack" value="Back" />*@
                                 <button type="button" class="btn btnBlack">Back</button>
                                 <input type="submit" tabindex="1" class="btn btnBlack" value="Submit" />
-                                @*<input type="button" tabindex="3" class="btn btn-danger" value="Clear" />*@
-                                <button type="button" class="btn btn-danger">Clear</button>
                             </div>
 
                         </div>
@@ -277,39 +264,6 @@
         </table>
 
     </form>
-
-    <div class="container-fluid">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Visa Number</th>
-                    <th>Name</th>
-                    <th>Date of Birth</th>
-                    <th>Gender</th>
-                    <th>Nationality</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@($"{registration.VisaNum1}-{registration.VisaNum2}-{registration.VisaNum3}-{registration.VisaNum4}")</td>
-                    <td>@registration.Name</td>
-                    <td>@(registration.DateOfBirth.ToShortDateString())</td>
-                    <td>@(Headache.Models.Constants.GetGender(registration.Gender))</td>
-                    <td>@registration.Nationality -- @(Headache.Models.Constants.GetNationality(registration.Nationality))</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="text-center">
-            @if (valid)
-            {
-                <p><strong style="color:green;">The visa is valid</strong></p>
-            }
-            else
-            {
-                <p><strong style="color:red;">The visa is not valid</strong></p>
-            }
-        </div>
-    </div>
 </div>
 
 @section Scripts{
@@ -373,6 +327,30 @@
         $('#input-nationality').change(function () {
             $('#select-nationality').val($(this).val());
         });
+
+        //-----------------------------------
+
+        $('#select-gender').val(@Model.Gender);
+        $('#select-nationality').val(@Model.Nationality);
+
+        (function () {
+            var options = '';
+            for (let i = 1; i <= 31; i++) {
+                options += '<option value="' + i + '">' + i + '</option>';
+            }
+            $('#select-dd').html(options);
+        })();
+
+        @{ 
+            var date = Model.DateOfBirth;
+            var dd = date.Day;
+            var mm = date.Month;
+            var yyyy = date.Year;
+        }
+
+        $('#select-dd').val(@dd);
+        $('#select-mmm').val(@mm);
+        $('#select-yyyy').val(@yyyy);
 
     </script>
 
